@@ -2,6 +2,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class User {
     private int id;
+    private int group_id;
     private String userName;
     private String email;
     private String password;
@@ -9,10 +10,19 @@ public class User {
     public User() {
     }
 
-    public User(String userName, String email, String password) {
+    public User(int group_id, String userName, String email, String password) {
+        this.group_id = group_id;
         this.userName = userName;
         this.email = email;
         this.hashPassword(password);
+    }
+
+    public int getGroup_id() {
+        return group_id;
+    }
+
+    public void setGroup_id(int group_id) {
+        this.group_id = group_id;
     }
 
     public void setId(int id) {

@@ -94,8 +94,8 @@ public class SolutionDao {
                 String updated = resultSet.getString("updated");
                 String description = resultSet.getString("description");
                 int exerciseId = resultSet.getInt("exercise_id");
-                System.out.println(String.format("ID: %s, Crated: %s, Updated: %s, Description: %s," +
-                        " Exercise id: %s, User id: %s", id, created, updated, description, exerciseId, userId));
+                System.out.println(String.format("Solution ID: %s, Crated: %s, Updated: %s, Description: %s," +
+                        " Exercise id: %s, User ID: %s", id, created, updated, description, exerciseId, userId));
 
             }
 

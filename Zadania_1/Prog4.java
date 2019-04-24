@@ -1,3 +1,4 @@
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -5,7 +6,6 @@ public class Prog4 {
     public static void main(String[] args) {
         try {
             Scanner scann = new Scanner(System.in);
-            SolutionDao solutionDao = new SolutionDao();
             UserDao userDao = new UserDao();
             ExerciseDao exerciseDao = new ExerciseDao();
             do {
@@ -18,15 +18,14 @@ public class Prog4 {
                 String scan = scann.next();
                 if (scan.equals(add)) {
                     userDao.findAllUsers();
-                    System.out.print("Podaj id uzytkownikow: ");
-                    int userId = scann.nextInt();
+                    int[] listOfId = usersIdList();
                     exerciseDao.findAllExercises();
                     System.out.print("Podaj id zadania: ");
                     int exerciseId = scann.nextInt();
-                    addingSolution(userId, exerciseId);
+                    addingSolution(listOfId, exerciseId);
 
                 } else if (scan.equals(view)) {
-                    edditingGroup();
+                    viewSolutions();
 
                 } else if (scan.equals("quit")){
                     break;
@@ -41,29 +40,37 @@ public class Prog4 {
 
 
     }
+    private static int[] usersIdList (){
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Podaj id uzytkownikow (oddzielajac przecinkiem): ");
+        String text = scanner.nextLine();
+        String[] tab = null;
+        tab = text.split(",");
+        int[] idList = new int[tab.length];
+        for (int i = 0; i < tab.length; i++){
+            idList[i] = Integer.parseInt(tab[i]);
+        }
+        return idList;
+    }
 
-    private static void addingSolution(int userId, int exerciseId){
+    private static void addingSolution(int[] idList, int exerciseId){
         SolutionDao solutionDao = new SolutionDao();
-
-        System.out.print("Podaj nazwe: ");
-        String name = nextScanString();
-        Group group = new Group(name);
-        groupDao.create(group);
-        System.out.println("Grupa zostala dodana.");
+        Date date = new Date();
+        String dateOutput = String.format("%tF %<tT", date);
+        for (int id : idList){
+            Solution solution = new Solution(dateOutput, null, null, exerciseId, id);
+            solutionDao.create(solution);
+        }
+        System.out.println("Obiekt/y zostal/y utworzony/e.");
 
     }
 
-    private static void edditingGroup(){
-        GroupDao groupDao = new GroupDao();
+    private static void viewSolutions(){
+        SolutionDao solutionDao = new SolutionDao();
         try {
-            System.out.print("Podaj id uzytkownika, ktorego dane chcesz zmienic: ");
+            System.out.print("Podaj id uzytkownika, ktorego rozwiazania chcesz zobaczyc: ");
             int id = nextScanInt();
-            System.out.print("Podaj nazwe: ");
-            String name = nextScanString();
-            Group group = new Group(id, name);
-            group.setName(name);
-            groupDao.update(group);
-            System.out.println("Dane grupy zostaly zmienione.");
+            solutionDao.findAllByUserId(id);
         } catch (InputMismatchException a) {
             System.out.println("Podaj liczbe!");
         }
@@ -77,8 +84,5 @@ public class Prog4 {
     private static int nextScanInt (){
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
-    }
-    private static int[] userIdList (){
-
     }
 }

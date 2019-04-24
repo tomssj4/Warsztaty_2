@@ -40,13 +40,15 @@ public class Prog1 {
 
     private static void addingUser (){
         UserDao userDao = new UserDao();
+        System.out.println("Podaj ID grupy uzytownika: ");
+        int groupId = nextScanInt();
         System.out.print("Podaj username: ");
         String username = nextScanString();
         System.out.print("Podaj email: ");
         String email = nextScanString();
         System.out.print("Podaj haslo: ");
         String password = nextScanString();
-        User user = new User(username, email, password);
+        User user = new User(groupId, username, email, password);
         userDao.create(user);
         System.out.println("Uzytkownik zostal dodany.");
 
@@ -57,6 +59,8 @@ public class Prog1 {
         try {
             System.out.print("Podaj id uzytkownika, ktorego dane chcesz zmienic: ");
             int id = nextScanInt();
+            System.out.println("Podaj nowe ID grupy uzytownika: ");
+            int groupId = nextScanInt();
             System.out.print("Podaj nowy username: ");
             String username = nextScanString();
             System.out.print("Podaj nowy email: ");
@@ -64,6 +68,7 @@ public class Prog1 {
             System.out.print("Podaj nowe haslo: ");
             String password = nextScanString();
             User user = userDao.read(id);
+            user.setGroup_id(groupId);
             user.setUserName(username);
             user.setEmail(email);
             user.setPassword(password);
