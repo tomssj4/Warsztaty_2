@@ -1,6 +1,5 @@
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ExerciseDao {
     private static final String CREATE_EXERCISE_QUERY =

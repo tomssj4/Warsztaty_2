@@ -1,5 +1,4 @@
 import java.sql.*;
-import java.util.Arrays;
 
 public class SolutionDao {
     private static final String CREATE_SOLUTION_QUERY =
