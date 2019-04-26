@@ -13,7 +13,7 @@ public class SolutionDao {
     private static final String FIND_ALL_SOLUTION_QUERY =
             "SELECT * FROM solution";
     private static final String FIND_ALL_BY_USER_ID = "SELECT * FROM solution WHERE users_id = ?;";
-    private static final String FIND_ALL_BY_EXERCIESE_ID = "SELECT * FROM solution WHERE exercise_id" +
+    private static final String FIND_ALL_BY_EXERCISE_ID = "SELECT * FROM solution WHERE exercise_id" +
             " = ? ORDER BY created DESC;";
 
     public Solution create(Solution solution) {
@@ -106,7 +106,7 @@ public class SolutionDao {
 
     public void findAllByExerciseId(int exerciseId) {
         try (Connection conn = ConnectionUtil.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(FIND_ALL_BY_EXERCIESE_ID);
+            PreparedStatement statement = conn.prepareStatement(FIND_ALL_BY_EXERCISE_ID);
             statement.setInt(1, exerciseId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -124,7 +124,7 @@ public class SolutionDao {
             e.printStackTrace();
         }
     }
-    public void findAllExercises() {
+    public void findAllSolutions() {
         try (Connection conn = ConnectionUtil.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_SOLUTION_QUERY);
             ResultSet resultSet = statement.executeQuery();

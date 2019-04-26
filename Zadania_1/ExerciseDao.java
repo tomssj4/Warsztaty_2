@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ExerciseDao {
     private static final String CREATE_EXERCISE_QUERY =
@@ -11,6 +13,8 @@ public class ExerciseDao {
             "DELETE FROM exercise WHERE id = ?";
     private static final String FIND_ALL_EXERCISE_QUERY =
             "SELECT * FROM exercise";
+    private static final String FIND_ALL_EXERCISES_WHERE_NO_SOLUTION = "SELECT * FROM exercise " +
+            "WHERE exercise.id NOT IN (SELECT solution.exercise_id FROM solution WHERE users_id=?)";
 
     public Exercise create(Exercise exercise) {
         try (Connection conn = ConnectionUtil.getConnection()) {
@@ -70,6 +74,7 @@ public class ExerciseDao {
             e.printStackTrace();
         }
     }
+
     public void findAllExercises() {
         try (Connection conn = ConnectionUtil.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_EXERCISE_QUERY);
@@ -87,5 +92,39 @@ public class ExerciseDao {
         }
     }
 
+    public void findAllExercisesWhereNoSolution(int userId) {
+        try (Connection conn = ConnectionUtil.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(FIND_ALL_EXERCISES_WHERE_NO_SOLUTION);
+            statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String title = resultSet.getString("title");
+                String description = resultSet.getString("description");
+                System.out.println(String.format("Exercise ID: %s, Title: %s, Description: %s",
+                        id, title, description));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public ArrayList findAllExercisesIdWhereNoSolution(int userId) {
+        ArrayList<Object> idList = new ArrayList<>();
+        try (Connection conn = ConnectionUtil.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(FIND_ALL_EXERCISES_WHERE_NO_SOLUTION);
+            statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                idList.add(id);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idList;
+
+
+    }
 }
