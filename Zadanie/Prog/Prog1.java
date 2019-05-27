@@ -1,3 +1,8 @@
+package Prog;
+
+import Classes.User;
+import Dao.UserDao;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -24,11 +29,12 @@ public class Prog1 {
                 } else if (scan.equals(delete)) {
                     deletingUser();
 
-                } else if (scan.equals("quit")){
+                } else if (scan.equals("quit")) {
                     break;
-            } else {
+                } else {
                     System.out.println("Wpisz poprawne polecenie!");
                 }
+                scann.close();
             } while (true);
             System.out.println("Koniec programu.");
         } catch (InputMismatchException e) {
@@ -38,7 +44,7 @@ public class Prog1 {
 
     }
 
-    private static void addingUser (){
+    private static void addingUser() {
         UserDao userDao = new UserDao();
         System.out.println("Podaj ID grupy uzytownika: ");
         int groupId = nextScanInt();
@@ -54,24 +60,19 @@ public class Prog1 {
 
     }
 
-    private static void edditingUser (){
+    private static void edditingUser() {
         UserDao userDao = new UserDao();
         try {
             System.out.print("Podaj id uzytkownika, ktorego dane chcesz zmienic: ");
-            int id = nextScanInt();
+            User user = userDao.read(nextScanInt());
             System.out.println("Podaj nowe ID grupy uzytownika: ");
-            int groupId = nextScanInt();
+            user.setGroup_id(nextScanInt());
             System.out.print("Podaj nowy username: ");
-            String username = nextScanString();
+            user.setUserName(nextScanString());
             System.out.print("Podaj nowy email: ");
-            String email = nextScanString();
+            user.setEmail(nextScanString());
             System.out.print("Podaj nowe haslo: ");
-            String password = nextScanString();
-            User user = userDao.read(id);
-            user.setGroup_id(groupId);
-            user.setUserName(username);
-            user.setEmail(email);
-            user.setPassword(password);
+            user.setPassword(nextScanString());
             userDao.update(user);
             System.out.println("Dane uzytkownika zostaly zmienione.");
         } catch (InputMismatchException a) {
@@ -79,7 +80,7 @@ public class Prog1 {
         }
     }
 
-    private static void deletingUser (){
+    private static void deletingUser() {
         UserDao userDao = new UserDao();
         try {
             System.out.print("Podaj id uzytkownika, ktorego chcesz usunac: ");
@@ -91,12 +92,13 @@ public class Prog1 {
         }
     }
 
-    private static String nextScanString (){
+    private static String nextScanString() {
         Scanner scanner = new Scanner(System.in);
         return scanner.next();
 
     }
-    private static int nextScanInt (){
+
+    private static int nextScanInt() {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
     }

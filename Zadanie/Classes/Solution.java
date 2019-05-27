@@ -1,10 +1,12 @@
+package Classes;
+
 public class Solution {
-    int id;
-    String created;
-    String updated;
-    String description;
-    int exerciseId;
-    int usersId;
+    private int id;
+    private String created;
+    private String updated;
+    private String description;
+    private int exerciseId;
+    private int usersId;
 
     public Solution(int id, String created, String updated, String description, int exerciseId, int usersId) {
         this.id = id;

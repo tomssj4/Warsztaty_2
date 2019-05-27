@@ -1,4 +1,9 @@
+package Dao;
+
 import java.sql.*;
+import Classes.Group;
+import ConnectionUtil.ConnectionUtil;
+
 
 public class GroupDao {
     private static final String CREATE_GROUP_QUERY =
@@ -41,6 +46,7 @@ public class GroupDao {
                 return group;
             }
         } catch (SQLException e) {
+            System.out.println("Grupa o podanym id nie istnieje.");
             e.printStackTrace();
         }
         return null;
@@ -63,23 +69,27 @@ public class GroupDao {
             statement.setInt(1, groupId);
             statement.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("Grupa o podanym id nie istnieje.");
             e.printStackTrace();
         }
     }
-    public void findAllExercises() {
+
+    public String findAllGroup() {
+        int id = 0;
+        String name = "";
         try (Connection conn = ConnectionUtil.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_GROUP_QUERY);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                System.out.println(String.format("Group ID: %s, Name: %s",
-                        id, name));
+                id = resultSet.getInt("id");
+                name = resultSet.getString("name");
 
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return String.format("Classes.Group ID: %s, Name: %s",
+                id, name);
     }
 
 

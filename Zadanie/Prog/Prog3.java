@@ -1,13 +1,19 @@
+package Prog;
+
+import Dao.GroupDao;
+import Classes.Group;
+
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Prog2 {
+public class Prog3 {
     public static void main(String[] args) {
         try {
             Scanner scann = new Scanner(System.in);
-            ExerciseDao exerciseDao = new ExerciseDao();
+            GroupDao groupDao = new GroupDao();
             do {
-                exerciseDao.findAllExercises();
+                groupDao.findAllGroup();
                 String add = "add";
                 String edit = "edit";
                 String delete = "delete";
@@ -16,19 +22,20 @@ public class Prog2 {
                         "> %s - usuniecie zadania\n   > %s - zakonczenie programu", add, edit, delete, quit));
                 String scan = scann.next();
                 if (scan.equals(add)) {
-                    addingExercise();
+                    addingGroup();
 
                 } else if (scan.equals(edit)) {
-                    edditingExercise();
+                    edditingGroup();
 
                 } else if (scan.equals(delete)) {
-                    deletingExercise();
+                    deletingGroup();
 
-                } else if (scan.equals("quit")){
+                } else if (scan.equals("quit")) {
                     break;
                 } else {
                     System.out.println("Wpisz poprawne polecenie!");
                 }
+                scann.close();
             } while (true);
             System.out.println("Koniec programu.");
         } catch (InputMismatchException e) {
@@ -38,55 +45,51 @@ public class Prog2 {
 
     }
 
-    private static void addingExercise(){
-        ExerciseDao exerciseDao = new ExerciseDao();
-        System.out.print("Podaj tytul: ");
-        String title = nextScanString();
-        System.out.print("Podaj opis: ");
-        String description = nextScanString();
-        Exercise exercise = new Exercise(title, description);
-        exerciseDao.create(exercise);
-        System.out.println("Zadanie zostalo dodane.");
+    private static void addingGroup() {
+        GroupDao groupDao = new GroupDao();
+        System.out.print("Podaj nazwe: ");
+        String name = nextScanString();
+        Group group = new Group(name);
+        groupDao.create(group);
+        System.out.println("Grupa zostala dodana.");
 
     }
 
-    private static void edditingExercise(){
-        ExerciseDao exerciseDao = new ExerciseDao();
+    private static void edditingGroup() {
+        GroupDao groupDao = new GroupDao();
         try {
             System.out.print("Podaj id uzytkownika, ktorego dane chcesz zmienic: ");
             int id = nextScanInt();
-            System.out.print("Podaj tytul: ");
-            String title = nextScanString();
-            System.out.print("Podaj opis: ");
-            String description = nextScanString();
-            Exercise exercise = new Exercise(id, title, description);
-            exercise.setTitle(title);
-            exercise.setDescription(description);
-            exerciseDao.update(exercise);
-            System.out.println("Dane zadania zostaly zmienione.");
+            System.out.print("Podaj nazwe: ");
+            String name = nextScanString();
+            Group group = new Group(id, name);
+            group.setName(name);
+            groupDao.update(group);
+            System.out.println("Dane grupy zostaly zmienione.");
         } catch (InputMismatchException a) {
             System.out.println("Podaj liczbe!");
         }
     }
 
-    private static void deletingExercise(){
-        ExerciseDao exerciseDao = new ExerciseDao();
+    private static void deletingGroup() {
+        GroupDao groupDao = new GroupDao();
         try {
-            System.out.print("Podaj id zadania, ktore chcesz usunac: ");
+            System.out.print("Podaj id grupy, ktora chcesz usunac: ");
             int id = nextScanInt();
-            exerciseDao.delete(id);
-            System.out.println("Zadanie zostalo usuniete.");
+            groupDao.delete(id);
+            System.out.println("Grupa zostala usunieta.");
         } catch (InputMismatchException b) {
             System.out.println("Podaj liczbe!");
         }
     }
 
-    private static String nextScanString (){
+    private static String nextScanString() {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
 
     }
-    private static int nextScanInt (){
+
+    private static int nextScanInt() {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
     }

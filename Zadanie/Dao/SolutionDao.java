@@ -1,3 +1,8 @@
+package Dao;
+
+import Classes.Solution;
+import ConnectionUtil.ConnectionUtil;
+
 import java.sql.*;
 
 public class SolutionDao {
@@ -15,7 +20,7 @@ public class SolutionDao {
     private static final String FIND_ALL_BY_EXERCISE_ID = "SELECT * FROM solution WHERE exercise_id" +
             " = ? ORDER BY created DESC;";
 
-    public Solution create(Solution solution) {
+    public static Solution create(Solution solution) {
         try (Connection conn = ConnectionUtil.getConnection()) {
             PreparedStatement statement =
                     conn.prepareStatement(CREATE_SOLUTION_QUERY, Statement.RETURN_GENERATED_KEYS);
@@ -36,7 +41,7 @@ public class SolutionDao {
         }
     }
 
-    public Solution read(int solutionId) {
+    public static Solution read(int solutionId) {
         try (Connection conn = ConnectionUtil.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(READ_SOLUTION_QUERY);
             statement.setInt(1, solutionId);
@@ -52,12 +57,13 @@ public class SolutionDao {
                 return solution;
             }
         } catch (SQLException e) {
+            System.out.println("Rozwiazanie o podanym id nie istnieje.");
             e.printStackTrace();
         }
         return null;
     }
 
-    public void update(Solution solution) {
+    public static void update(Solution solution) {
         try (Connection conn = ConnectionUtil.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(UPDATE_SOLUTION_QUERY);
             statement.setString(1, solution.getCreated());
@@ -72,75 +78,95 @@ public class SolutionDao {
         }
     }
 
-    public void delete(int solutionId) {
+    public static void delete(int solutionId) {
         try (Connection conn = ConnectionUtil.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(DELETE_SOLUTION_QUERY);
             statement.setInt(1, solutionId);
             statement.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("Rozwiazanie o podanym id nie istnieje.");
             e.printStackTrace();
         }
     }
 
-    public void findAllByUserId(int userId) {
+    public static String findAllByUserId(int userId) {
+        int id = 0;
+        String created = "";
+        String updated = "";
+        String description = "";
+        int exerciseId = 0;
         try (Connection conn = ConnectionUtil.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_BY_USER_ID);
             statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String created = resultSet.getString("created");
-                String updated = resultSet.getString("updated");
-                String description = resultSet.getString("description");
-                int exerciseId = resultSet.getInt("exercise_id");
-                System.out.println(String.format("Solution ID: %s, Crated: %s, Updated: %s, Description: %s," +
-                        " Exercise id: %s, User ID: %s", id, created, updated, description, exerciseId, userId));
+                id = resultSet.getInt("id");
+                created = resultSet.getString("created");
+                updated = resultSet.getString("updated");
+                description = resultSet.getString("description");
+                exerciseId = resultSet.getInt("exercise_id");
 
             }
 
         } catch (SQLException e) {
+            System.out.println("Uzytkownik o podanym id nie istnieje.");
             e.printStackTrace();
         }
+        return String.format("Classes.Solution ID: %s, Crated: %s, Updated: %s, Description: %s," +
+                " Classes.Exercise id: %s, Classes.User ID: %s", id, created, updated, description, exerciseId, userId);
     }
 
-    public void findAllByExerciseId(int exerciseId) {
+    public static String findAllByExerciseId(int exerciseId) {
+        int id = 0;
+        String created = "";
+        String updated = "";
+        String description = "";
+        int usersId = 0;
         try (Connection conn = ConnectionUtil.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_BY_EXERCISE_ID);
             statement.setInt(1, exerciseId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String created = resultSet.getString("created");
-                String updated = resultSet.getString("updated");
-                String description = resultSet.getString("description");
-                int usersId = resultSet.getInt("users_id");
-                System.out.println(String.format("ID: %s, Crated: %s, Updated: %s, Description: %s," +
-                        " Exercise id: %s, User id: %s", id, created, updated, description, exerciseId, usersId));
+                id = resultSet.getInt("id");
+                created = resultSet.getString("created");
+                updated = resultSet.getString("updated");
+                description = resultSet.getString("description");
+                usersId = resultSet.getInt("users_id");
 
             }
 
         } catch (SQLException e) {
+            System.out.println("Cwiczenie o podanym id nie istnieje.");
             e.printStackTrace();
         }
+        return String.format("ID: %s, Crated: %s, Updated: %s, Description: %s," +
+                " Classes.Exercise id: %s, Classes.User id: %s", id, created, updated, description, exerciseId, usersId);
     }
-    public void findAllSolutions() {
+
+    public static String findAllSolutions() {
+        int id = 0;
+        String created = "";
+        String updated = "";
+        String description = "";
+        int exerciseId = 0;
+        int usersId = 0;
         try (Connection conn = ConnectionUtil.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_SOLUTION_QUERY);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String created = resultSet.getString("created");
-                String updated = resultSet.getString("updated");
-                String description = resultSet.getString("description");
-                int exerciseId = resultSet.getInt("exercise_id");
-                int usersId = resultSet.getInt("users_id");
-                System.out.println(String.format("ID: %s, Crated: %s, Updated: %s, Description: %s," +
-                        " Exercise id: %s, User id: %s", id, created, updated, description, exerciseId, usersId));
+                id = resultSet.getInt("id");
+                created = resultSet.getString("created");
+                updated = resultSet.getString("updated");
+                description = resultSet.getString("description");
+                exerciseId = resultSet.getInt("exercise_id");
+                usersId = resultSet.getInt("users_id");
 
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return String.format("ID: %s, Crated: %s, Updated: %s, Description: %s," +
+                " Classes.Exercise id: %s, Classes.User id: %s", id, created, updated, description, exerciseId, usersId);
     }
 
 }

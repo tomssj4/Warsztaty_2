@@ -1,7 +1,9 @@
+package Classes;
+
 public class Exercise {
-    int id;
-    String title;
-    String description;
+    private int id;
+    private String title;
+    private String description;
 
     public Exercise(int id, String title, String description) {
         this.id = id;

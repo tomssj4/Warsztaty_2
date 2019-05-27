@@ -1,5 +1,11 @@
+package Dao;
+
+import Classes.Exercise;
+
 import java.sql.*;
 import java.util.ArrayList;
+import ConnectionUtil.ConnectionUtil;
+
 
 public class ExerciseDao {
     private static final String CREATE_EXERCISE_QUERY =
@@ -47,6 +53,7 @@ public class ExerciseDao {
                 return exercise;
             }
         } catch (SQLException e) {
+            System.out.println("Cwiczenie o podanym id nie istnieje.");
             e.printStackTrace();
         }
         return null;
@@ -70,42 +77,51 @@ public class ExerciseDao {
             statement.setInt(1, exerciseId);
             statement.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("Cwiczenie o podanym id nie istnieje.");
             e.printStackTrace();
         }
     }
 
-    public void findAllExercises() {
+    public String findAllExercises() {
+        int id = 0;
+        String title = "";
+        String description = "";
         try (Connection conn = ConnectionUtil.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_EXERCISE_QUERY);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String title = resultSet.getString("title");
-                String description = resultSet.getString("description");
-                System.out.println(String.format("Exercise ID: %s, Title: %s, Description: %s",
-                        id, title, description));
+                id = resultSet.getInt("id");
+                title = resultSet.getString("title");
+                description = resultSet.getString("description");
 
             }
         } catch (SQLException e) {
+            System.out.println("Brak danych.");
             e.printStackTrace();
         }
+        return String.format("Classes.Exercise ID: %s, Title: %s, Description: %s",
+                id, title, description);
     }
 
-    public void findAllExercisesWhereNoSolution(int userId) {
+    public String findAllExercisesWhereNoSolution(int userId) {
+        int id = 0;
+        String title = "";
+        String description = "";
         try (Connection conn = ConnectionUtil.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_EXERCISES_WHERE_NO_SOLUTION);
             statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String title = resultSet.getString("title");
-                String description = resultSet.getString("description");
-                System.out.println(String.format("Exercise ID: %s, Title: %s, Description: %s",
-                        id, title, description));
+                id = resultSet.getInt("id");
+                title = resultSet.getString("title");
+                description = resultSet.getString("description");
             }
         } catch (SQLException e) {
+            System.out.println("Uzytkownik o podanym id nie istnieje.");
             e.printStackTrace();
         }
+        return String.format("Classes.Exercise ID: %s, Title: %s, Description: %s",
+                id, title, description);
     }
 
     public ArrayList findAllExercisesIdWhereNoSolution(int userId) {
@@ -120,6 +136,7 @@ public class ExerciseDao {
 
             }
         } catch (SQLException e) {
+            System.out.println("Uzytkownik o podanym id nie istnieje.");
             e.printStackTrace();
         }
         return idList;

@@ -1,3 +1,8 @@
+package Dao;
+
+import Classes.User;
+import ConnectionUtil.ConnectionUtil;
+
 import java.sql.*;
 
 public class UserDao {
@@ -11,7 +16,7 @@ public class UserDao {
             "DELETE FROM users WHERE id = ?";
     private static final String FIND_ALL_USERS_QUERY =
             "SELECT * FROM users";
-    private static final String FIND_ALL_BY_GROUP_ID ="SELECT * FROM users WHERE group_id = ?;";
+    private static final String FIND_ALL_BY_GROUP_ID = "SELECT * FROM users WHERE group_id = ?;";
 
     public User create(User user) {
         try (Connection conn = ConnectionUtil.getConnection()) {
@@ -48,6 +53,7 @@ public class UserDao {
                 return user;
             }
         } catch (SQLException e) {
+            System.out.println("Uzytwkownik o podanym id nie istnieje.");
             e.printStackTrace();
         }
         return null;
@@ -73,44 +79,54 @@ public class UserDao {
             statement.setInt(1, userId);
             statement.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("Uzytwkownik o podanym id nie istnieje.");
             e.printStackTrace();
         }
     }
 
-    public void findAllByGroupID(int userGroupId) {
+    public String findAllByGroupID(int userGroupId) {
+        int id = 0;
+        String username = "";
+        String email = "";
         try (Connection conn = ConnectionUtil.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_BY_GROUP_ID);
             statement.setInt(1, userGroupId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String username = resultSet.getString("username");
-                String email = resultSet.getString("email");
-                System.out.println(String.format("Group ID: %s, User ID: , Username: %s, Email: %s",
-                        userGroupId, id, username, email));
+                id = resultSet.getInt("id");
+                username = resultSet.getString("username");
+                email = resultSet.getString("email");
+
 
             }
         } catch (SQLException e) {
+            System.out.println("Grupa o podanym id nie istnieje.");
             e.printStackTrace();
         }
+        return String.format("Classes.Group ID: %s, Classes.User ID: , Username: %s, Email: %s",
+                userGroupId, id, username, email);
     }
 
-    public void findAllUsers() {
+    public String findAllUsers() {
+        int id = 0;
+        int groupId = 0;
+        String username = "";
+        String email = "";
         try (Connection conn = ConnectionUtil.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_USERS_QUERY);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                int groupId = resultSet.getInt("group_id");
-                String username = resultSet.getString("username");
-                String email = resultSet.getString("email");
-                System.out.println(String.format("User ID: %s, User group ID: %s, Username: %s, Email: %s",
-                        id, groupId, username, email));
+                id = resultSet.getInt("id");
+                groupId = resultSet.getInt("group_id");
+                username = resultSet.getString("username");
+                email = resultSet.getString("email");
 
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return String.format("Classes.User ID: %s, Classes.User group ID: %s, Username: %s, Email: %s",
+                id, groupId, username, email);
     }
 
 

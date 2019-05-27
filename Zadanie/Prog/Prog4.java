@@ -1,3 +1,10 @@
+package Prog;
+
+import Classes.Solution;
+import Dao.ExerciseDao;
+import Dao.SolutionDao;
+import Dao.UserDao;
+
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -27,11 +34,12 @@ public class Prog4 {
                 } else if (scan.equals(view)) {
                     viewSolutions();
 
-                } else if (scan.equals("quit")){
+                } else if (scan.equals("quit")) {
                     break;
                 } else {
                     System.out.println("Wpisz poprawne polecenie!");
                 }
+                scann.close();
             } while (true);
             System.out.println("Koniec programu.");
         } catch (InputMismatchException e) {
@@ -40,24 +48,25 @@ public class Prog4 {
 
 
     }
-    private static int[] usersIdList (){
+
+    private static int[] usersIdList() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Podaj id uzytkownikow (oddzielajac przecinkiem): ");
         String text = scanner.nextLine();
         String[] tab = null;
         tab = text.split(",");
         int[] idList = new int[tab.length];
-        for (int i = 0; i < tab.length; i++){
+        for (int i = 0; i < tab.length; i++) {
             idList[i] = Integer.parseInt(tab[i]);
         }
         return idList;
     }
 
-    private static void addingSolution(int[] idList, int exerciseId){
+    private static void addingSolution(int[] idList, int exerciseId) {
         SolutionDao solutionDao = new SolutionDao();
         Date date = new Date();
         String dateOutput = String.format("%tF %<tT", date);
-        for (int id : idList){
+        for (int id : idList) {
             Solution solution = new Solution(dateOutput, null, null, exerciseId, id);
             solutionDao.create(solution);
         }
@@ -65,7 +74,7 @@ public class Prog4 {
 
     }
 
-    private static void viewSolutions(){
+    private static void viewSolutions() {
         SolutionDao solutionDao = new SolutionDao();
         try {
             System.out.print("Podaj id uzytkownika, ktorego rozwiazania chcesz zobaczyc: ");
@@ -76,12 +85,13 @@ public class Prog4 {
         }
     }
 
-    private static String nextScanString (){
+    private static String nextScanString() {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
 
     }
-    private static int nextScanInt (){
+
+    private static int nextScanInt() {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
     }

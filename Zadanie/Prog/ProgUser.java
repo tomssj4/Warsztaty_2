@@ -1,3 +1,9 @@
+package Prog;
+
+import Classes.Solution;
+import Dao.ExerciseDao;
+import Dao.SolutionDao;
+
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
